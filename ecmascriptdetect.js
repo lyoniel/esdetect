@@ -1,3 +1,4 @@
+/*! ecmascriptdetect on: https://github.com/nicematt/ecmascript-detect */
 (function(root, name, factory) {
   'use strict'
 
