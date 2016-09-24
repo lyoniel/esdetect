@@ -15,10 +15,6 @@
 })(this, 'ecmascriptdetect', function(exports) {
   'use strict'
 
-  exports.noConflict = function() {
-    return exports
-  }
-
   var features = {
       "arrowFunction": "(a=>{})"
     , "class": "(class{})"
