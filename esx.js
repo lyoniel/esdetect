@@ -2,13 +2,12 @@
 (function (root, name, factory) {
   'use strict';
 
-  /* Require.js */
   if (("function" === typeof define) && define.amd)
     define([exports], factory);
-  /* Node.js */
+
   else if (typeof exports === 'object')
     factory(exports);
-  /* Web browser */
+
   else
     factory(root[name] = {});
 
