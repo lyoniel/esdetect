@@ -1,93 +1,82 @@
-/*! ecmascriptdetect on: https://github.com/nicematt/ecmascript-detect */
-(function(root, name, factory) {
-  'use strict'
+/*! esx on: https://github.com/nicematt/ecmascript-detect */
+(function (root, name, factory) {
+  'use strict';
 
+  /* Require.js */
+  if (("function" === typeof define) && define.amd)
+    define([exports], factory);
   /* Node.js */
-  if (typeof exports === 'object') {
-    factory(exports)
-  }
-
+  else if (typeof exports === 'object')
+    factory(exports);
   /* Web browser */
-  else {
-    factory(root[name] = {})
-  }
+  else
+    factory(root[name] = {});
 
-})(this, 'ecmascriptdetect', function(exports) {
-  'use strict'
+})(this, 'esx', function (exports) {
+  'use strict';
 
   var features = {
-      "arrowFunction": "(a=>{})"
+      "arrayComprehensions": "[for(_ of [0])_]"
+    , "arrowFunction": "(_=>_)"
     , "class": "(class{})"
     , "const": "const c=true"
     , "defaultParams": "(function(a=false){})"
-    , "destructuring": "var {a}={a:true}"
+    , "destructuring": "let {d}={a:true}"
     , "generator": "(function*(){})"
     , "getter": "({get a(){}})"
     , "forOf": "for(var b of [])"
-    , "label": "l:void 0"
-    , "let": "let v"
-    , "reservedWords": "({catch: true})"
+    , "label": "l:0"
+    , "let": "let o"
+    , "reservedWords": "({catch:true})"
     , "setter": "({set a(v){}})"
     , "spread": "[...[]]"
     , "super": "({b(){super.a}})"
     , "yield": "(function*(){yield true})"
-  }
+  };
+
+  exports.features = features;
 
   /**
    * Evaluate code to check its functionality.
    */
-  function evaluate(code) {
+  function evaluate (code) {
     try {
-      eval(code)
-      return true
+      eval(code);
+      return true;
     } catch(e) {
-      return false
+      return false;
     }
   }
 
   /**
    * Check if a set of features are supported.
    */
-  exports.supports = function() {
-
-    var code = "(function(){"
-
-    var i = 0,
-    len = arguments.length
+  function supports () {
+    var code = "(function(){";
+    var i = 0, len = arguments.length;
 
     for (; i < len; ++i) {
       var feature = arguments[i].toString();
-      if (feature in features)
-        code += features[feature] + ';'
+
+      if (features.hasOwnProperty(feature))
+        code += features[feature] + ';';
     }
 
-    code += "})()"
-
-    return evaluate(code)
-
+    code += "})()";
+    return evaluate(code);
   }
 
-  /**
-   * Empty and turns ecmascriptdetect dummy.
-   */
-  exports.emptyTables = function() {
-    var i
+  exports.supports = supports;
 
-    for (i in features)
-      delete features[i]
-
-    for (i in exports)
-      delete exports[i]
+  function checkES7 () {
+    return supports("arrayComprehensions");
   }
 
-  /**
-   * Check if current ES appears to be ES6.
-   */
-  function checkES6() {
-    var methods = typeof Object.assign === 'function' &&
-                  typeof Object.freeze === 'function'
+  function checkES6 () {
+    var methods = 'function' === typeof Object.assign &&
+                  'function' === typeof Object.freeze;
 
-    var syntax = exports.supports(
+    var syntax = supports(
                          "arrowFunction"
                        , "class"
                        , "const"
@@ -96,40 +85,35 @@
                        , "destructuring"
                        , "super"
                        , "yield"
-                       )
+                       );
 
-    return methods && syntax
+    return methods && syntax;
+  }
+
+  function checkES5 () {
+    var methods = 'function' === typeof [].filter &&
+                  'function' === typeof Function.prototype.bind &&
+                  'function' === typeof Object.defineProperty &&
+                  'function' === typeof ''.trim
+                  'object'   === typeof JSON;
+
+    var syntax = supports("reservedWords");
+    return methods && syntax;
+  }
+
+  function checkES3 () {
+    return "function" === typeof [].hasOwnProperty;
   }
 
   /**
-   * Check if current ES appears to be ES5.
+   * Check for ECMAScript version.
    */
-  function checkES5() {
-    var methods = typeof Array.prototype.filter === 'function' &&
-                  typeof Function.prototype.bind === 'function' &&
-                  typeof Object.defineProperty === 'function' &&
-                  typeof JSON === 'object' &&
-                  typeof String.prototype.trim === 'function'
-
-    var syntax = exports.supports("reservedWords")
-
-    return methods && syntax
-  }
-
-  /**
-   * Check if browser's ECMAScript version is like a specific version.
-   */
-  exports.like = function(ver) {
-    if (ver === 6) {
-      return checkES6()
-    }
-    else if (ver === 5) {
-      return checkES5()
-    }
-    else {
-      /* checker not implemented for @ver */
-      return null
-    }
-  }
+  exports.detectVersion = function () {
+    return checkES7() ? 7 :
+           checkES6() ? 6 :
+           checkES5() ? 5 :
+           checkES3() ? 3 :
+           null;
+  };
 
 })
