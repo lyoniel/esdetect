@@ -35,7 +35,7 @@
     , "yield": "(function*(){yield true})"
   };
 
-  exports.features = features;
+  // exports.features = features;
 
   function evaluate (code) {
     try {
@@ -113,4 +113,5 @@
            checkES3() ? 3 :
            null;
   };
+
 });
