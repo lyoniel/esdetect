@@ -1,1 +1,1 @@
-# ecmascript-detect
+# esx
