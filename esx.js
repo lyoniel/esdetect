@@ -29,9 +29,9 @@
     , "reservedWords": "({catch:true})"
     , "setter": "({set a(v){}})"
     , "spread": "[...[]]"
-    , "super": "({b(){super.a}})"
     , "stringInterpolation": "`$\{0}`"
     , "stringLineBreak": "'\\\n'"
+    , "super": "({b(){super.a}})"
     , "yield": "(function*(){yield true})"
   };
 
@@ -113,5 +113,4 @@
            checkES3() ? 3 :
            null;
   };
-
 });
