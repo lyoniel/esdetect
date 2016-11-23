@@ -92,7 +92,7 @@
     var methods = 'function' === typeof [].filter &&
                   'function' === typeof Function.prototype.bind &&
                   'function' === typeof Object.defineProperty &&
-                  'function' === typeof ''.trim
+                  'function' === typeof ''.trim &&
                   'object'   === typeof JSON;
 
     var syntax = supports("reservedWords");
