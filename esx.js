@@ -1,5 +1,5 @@
 /*! esx on: https://github.com/nicematt/esx */
-(function (root, name, factory) {
+;(function (root, name, factory) {
   'use strict';
 
   if (("function" === typeof define) && define.amd)
