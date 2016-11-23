@@ -35,9 +35,6 @@
 
   exports.features = features;
 
-  /**
-   * Evaluate code to check its functionality.
-   */
   function evaluate (code) {
     try {
       eval(code);
