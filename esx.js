@@ -30,6 +30,8 @@
     , "setter": "({set a(v){}})"
     , "spread": "[...[]]"
     , "super": "({b(){super.a}})"
+    , "stringInterpolation": "`$\{0}`"
+    , "stringLineBreak": "'\\\n'"
     , "yield": "(function*(){yield true})"
   };
 
