@@ -1,4 +1,4 @@
-/*! esx on: https://github.com/nicematt/ecmascript-detect */
+/*! esx on: https://github.com/nicematt/esx */
 (function (root, name, factory) {
   'use strict';
 
