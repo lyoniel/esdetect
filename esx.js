@@ -1,4 +1,4 @@
-/*! https://github.com/hydroper/esx */
+/*! https://github.com/hydroper/esverd */
 ;(function(root, factory) {
   'use strict';
 
@@ -10,10 +10,9 @@
     factory(exports);
   /* Browser export */
   else
-    factory(root.esx = {});
+    factory(root.esverd = {});
 
 })(this, function(exports) {
-
   'use strict';
 
   var features = {
@@ -21,10 +20,10 @@
     , 'ArrowFunction': '(_ => _)'
     , 'Class': '(class Name {})'
     , 'Const': 'const constant = true'
-    , 'DefaultParameter': '(function (A=true) {})'
+    , 'DefaultParameter': '(function (A = true) {})'
     , 'Destructuring': 'let {dest} = { dest: true }'
     , 'ForOf': 'for (var b of [])'
-    , 'Generator': '(function*(){})'
+    , 'Generator': '(function*() {})'
     , 'PropertyGetter': '({ get a() {} })'
     , 'PropertySetter': '({ set a(v) {} })'
     , 'IdentifierUnicodeEscapeSequence': '\\u0041'
@@ -74,10 +73,10 @@
   }
 
   function checkES6() {
-    var methods = 'function' === typeof Object.assign &&
-                  'function' === typeof Object.freeze;
+    var methodSupport = ( 'function' == typeof Object.assign ) &&
+      ( 'function' == typeof Object.freeze );
 
-    var syntax = supports(
+    var syntaxSupport = supports(
         'ArrowFunction'
       , 'Class'
       , 'Const'
@@ -87,16 +86,21 @@
       , 'Generator'
       , 'SuperExpression'
     );
-
-    return methods && syntax;
+    return methodSupport && syntaxSupport;
   }
 
   function checkES5() {
-    var methodSupport = ( 'function' === typeof [].filter ) &&
-      ( 'function' === typeof Function.prototype.bind ) &&
-      ( 'function' === typeof Object.defineProperty ) &&
-      ( 'function' === typeof ''.trim ) &&
-      ( 'object'   === typeof JSON );
+    var methodSupport =
+      /* Array #filter */
+      ( 'function' == typeof [].filter ) &&
+      /* Function #bind */
+      ( Function.prototype.bind instanceof Function ) &&
+      /* static Object.defineProperty */
+      ( Object.defineProperty instanceof Function ) &&
+      /* String #trim */
+      ( 'function' == typeof ''.trim ) &&
+      /* JSON library */
+      ( JSON instanceof Object );
 
     var syntaxSupport = supports('ReservedWordIdentifier') &&
       supports('LineBreakString');
@@ -105,13 +109,13 @@
   }
 
   function checkES3() {
-    return 'function' === typeof [].hasOwnProperty;
+    return [].hasOwnProperty instanceof Function;
   }
 
   /**
    * Check for ECMAScript version.
    */
-  exports.detectVersion = function() {
+  function detectVersion() {
     return checkES7() ? 7 :
       checkES6() ? 6 :
       checkES5() ? 5 :
@@ -119,4 +123,5 @@
       undefined;
   };
 
+  exports.version = detectVersion;
 });
