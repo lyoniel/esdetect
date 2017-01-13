@@ -9,8 +9,7 @@ Any issue, suggestion and pull request is welcome!
 The module documentation can be found [here](https://hydroper.github.io/esverd/module-esverd.html). Compile it using:
 
 ```batch
-jsdoc -c jsdoc/conf.json -t ./node_modules/ink-do
-cstrap/template -d docs -R README.md -r esverd.js
+jsdoc -c jsdoc/conf.json -t ./node_modules/ink-docstrap/template -d docs -R README.md -r esverd.js
 ```
 
 ## Most known features
