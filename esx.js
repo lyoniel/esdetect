@@ -1,43 +1,44 @@
-/*! esx on: https://github.com/hydroper/esx */
-;(function (root, name, factory) {
+/*! https://github.com/hydroper/esx */
+;(function(root, factory) {
   'use strict';
 
-  if (("function" === typeof define) && define.amd)
+  /* Require.JS export */
+  if (('function' === typeof define) && define.amd)
     define([exports], factory);
-
+  /* Node.JS export */
   else if (typeof exports === 'object')
     factory(exports);
-
+  /* Browser export */
   else
-    factory(root[name] = {});
+    factory(root.esx = {});
 
-})(this, 'esx', function (exports) {
+})(this, function(exports) {
+
   'use strict';
 
   var features = {
-      "arrayComprehensions": "[for(_ of [0])_]"
-    , "arrowFunction": "(_=>_)"
-    , "class": "(class{})"
-    , "const": "const c=true"
-    , "defaultParams": "(function(a=false){})"
-    , "destructuring": "let {d}={a:true}"
-    , "forOf": "for(var b of [])"
-    , "generator": "(function*(){})"
-    , "getter": "({get a(){}})"
-    , "label": "l:0"
-    , "let": "let o"
-    , "reservedWords": "({catch:true})"
-    , "setter": "({set a(v){}})"
-    , "spread": "[...[]]"
-    , "stringInterpolation": "`$\{0}`"
-    , "stringLineBreak": "'\\\n'"
-    , "super": "({b(){super.a}})"
-    , "yield": "(function*(){yield true})"
+      'ArrayComprehensions': '[ for(a of []) a ]'
+    , 'ArrowFunction': '(_ => _)'
+    , 'Class': '(class Name {})'
+    , 'Const': 'const constant = true'
+    , 'DefaultParameter': '(function (A=true) {})'
+    , 'Destructuring': 'let {dest} = { dest: true }'
+    , 'ForOf': 'for (var b of [])'
+    , 'Generator': '(function*(){})'
+    , 'PropertyGetter': '({ get a() {} })'
+    , 'PropertySetter': '({ set a(v) {} })'
+    , 'IdentifierUnicodeEscapeSequence': '\\u0041'
+    , 'IdentifierUnicodeEscapeSequence2': '\\u{41}'
+    , 'Label': 'labelName: ;'
+    , 'Let': 'let stuck'
+    , 'LineBreakString': '\'\\\n\''
+    , 'ReservedWordIdentifier': '({ catch: true })'
+    , 'SpreadOperation': '[...[]]'
+    , 'TemplateLiteral': '`template`'
+    , 'SuperExpression': '({ method() { super.prop }} )'
   };
 
-  // exports.features = features;
-
-  function evaluate (code) {
+  function evaluate(code) {
     try {
       eval(code);
       return true;
@@ -47,71 +48,75 @@
   }
 
   /**
-   * Check if a set of features are supported.
+   * Checks if a set of features are supported.
    */
-  function supports () {
-    var code = "(function(){";
-    var i = 0, len = arguments.length;
+  function supports() {
+    var code = '(function(){';
 
-    for (; i < len; ++i) {
+    var i = 0;
+    var len = arguments.length;
+
+    while(i <= len) {
       var feature = arguments[i].toString();
 
       if (features.hasOwnProperty(feature))
         code += features[feature] + ';';
     }
 
-    code += "})()";
+    code += '})()';
     return evaluate(code);
   }
 
   exports.supports = supports;
 
-  function checkES7 () {
-    return supports("arrayComprehensions");
+  function checkES7() {
+    return supports('ArrayComprehensions');
   }
 
-  function checkES6 () {
+  function checkES6() {
     var methods = 'function' === typeof Object.assign &&
                   'function' === typeof Object.freeze;
 
     var syntax = supports(
-                         "arrowFunction"
-                       , "class"
-                       , "const"
-                       , "forOf"
-                       , "defaultParams"
-                       , "destructuring"
-                       , "super"
-                       , "yield"
-                       );
+        'ArrowFunction'
+      , 'Class'
+      , 'Const'
+      , 'ForOf'
+      , 'DefaultParameter'
+      , 'Destructuring'
+      , 'Generator'
+      , 'SuperExpression'
+    );
 
     return methods && syntax;
   }
 
-  function checkES5 () {
-    var methods = 'function' === typeof [].filter &&
-                  'function' === typeof Function.prototype.bind &&
-                  'function' === typeof Object.defineProperty &&
-                  'function' === typeof ''.trim &&
-                  'object'   === typeof JSON;
+  function checkES5() {
+    var methodSupport = ( 'function' === typeof [].filter ) &&
+      ( 'function' === typeof Function.prototype.bind ) &&
+      ( 'function' === typeof Object.defineProperty ) &&
+      ( 'function' === typeof ''.trim ) &&
+      ( 'object'   === typeof JSON );
 
-    var syntax = supports("reservedWords");
-    return methods && syntax;
+    var syntaxSupport = supports('ReservedWordIdentifier') &&
+      supports('LineBreakString');
+
+    return methodSupport && syntaxSupport;
   }
 
-  function checkES3 () {
-    return "function" === typeof [].hasOwnProperty;
+  function checkES3() {
+    return 'function' === typeof [].hasOwnProperty;
   }
 
   /**
    * Check for ECMAScript version.
    */
-  exports.detectVersion = function () {
+  exports.detectVersion = function() {
     return checkES7() ? 7 :
-           checkES6() ? 6 :
-           checkES5() ? 5 :
-           checkES3() ? 3 :
-           null;
+      checkES6() ? 6 :
+      checkES5() ? 5 :
+      checkES3() ? 3 :
+      undefined;
   };
 
 });
