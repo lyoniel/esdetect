@@ -52,7 +52,8 @@
 
   /**
    * Feature support checker.
-   * @return { Boolean } true if all argumented features are support. Or false, otherwise.
+   * @return { Boolean } true if all argumented features are support.
+   * Or false, otherwise.
    */
   function supports() {
     var code = '(function(){';
@@ -60,7 +61,7 @@
     var i = 0;
     var len = arguments.length;
 
-    while(i <= len) {
+    while (i <= len) {
       var feature = arguments[i].toString();
 
       if (features.hasOwnProperty(feature))
@@ -78,8 +79,8 @@
   }
 
   function checkES6() {
-    var methodSupport = ( 'function' == typeof Object.assign ) &&
-      ( 'function' == typeof Object.freeze );
+    var methodSupport = ( 'function' === typeof Object.assign ) &&
+      ( 'function' === typeof Object.freeze );
 
     var syntaxSupport = supports(
         'ArrowFunction'
@@ -120,8 +121,9 @@
   /**
    * Checks for ECMAScript version.
    * @return {Number | undefined} The possible ES version.
+   * If it's neither ECMAScript 3, undefined is returned.
    */
-  function detectVersion() {
+  function version() {
     return checkES7() ? 7 :
       checkES6() ? 6 :
       checkES5() ? 5 :
@@ -129,5 +131,5 @@
       undefined;
   };
 
-  exports.version = detectVersion;
+  exports.version = version;
 });
