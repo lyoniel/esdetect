@@ -47,7 +47,7 @@
   }
 
   /**
-   * Checks if a set of features are supported.
+   * Feature support checker.
    */
   function supports() {
     var code = '(function(){';
