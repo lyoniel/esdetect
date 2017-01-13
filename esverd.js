@@ -66,8 +66,10 @@
     while (i < len) {
       var feature = arguments[i++].toString();
 
-      if (features.hasOwnProperty(feature))
+      if (features.hasOwnProperty(feature)) {
         code += features[feature] + '; ';
+        continue;
+      }
 
       return false;
     }
