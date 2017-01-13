@@ -1,1 +1,1 @@
-# esx
+# esverd (ECMAScript Version Detector)
