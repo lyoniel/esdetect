@@ -6,7 +6,7 @@
   if (('function' === typeof define) && define.amd)
     define([exports], factory);
   /* Node.JS export */
-  else if (typeof exports === 'object')
+  else if ('object' === typeof exports)
     factory(exports);
   /* Browser export */
   else
