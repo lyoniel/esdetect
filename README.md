@@ -1,1 +1,1 @@
-# esverd (ECMAScript Version Detector)
+# ECMAScript Version Detector
