@@ -37,8 +37,8 @@
     , 'LineBreakString': '\'\\\n\''
     , 'ReservedWordIdentifier': '({ catch: true })'
     , 'Spread': '[...[]]'
-    , 'TemplateLiteral': '`template`'
     , 'SuperExpression': '({ method() { super.prop }} )'
+    , 'TemplateLiteral': '`template`'
   };
 
   function evaluate(code) {
@@ -52,6 +52,7 @@
 
   /**
    * Feature support checker.
+   * @example console.log(esverd.supports('Class'));
    * @method supports
    * @return {Boolean} true if all argumented features are support.
    * Or false, otherwise.
@@ -62,11 +63,13 @@
     var i = 0;
     var len = arguments.length;
 
-    while (i <= len) {
+    while (i < len) {
       var feature = arguments[i].toString();
 
       if (features.hasOwnProperty(feature))
         code += features[feature] + ';';
+
+      ++i;
     }
 
     code += '})()';
