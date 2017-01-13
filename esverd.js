@@ -64,12 +64,10 @@
     var len = arguments.length;
 
     while (i < len) {
-      var feature = arguments[i].toString();
+      var feature = arguments[i++].toString();
 
       if (features.hasOwnProperty(feature))
-        code += features[feature] + ';';
-
-      ++i;
+        code += features[feature] + '; ';
     }
 
     code += '})()';
