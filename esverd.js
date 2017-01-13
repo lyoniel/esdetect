@@ -67,7 +67,7 @@
       var feature = arguments[i++].toString();
 
       if (features.hasOwnProperty(feature))
-        code += features[feature] + '; '; 
+        code += features[feature] + '; ';
 
       return false;
     }
