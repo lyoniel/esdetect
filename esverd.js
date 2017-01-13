@@ -68,6 +68,8 @@
 
       if (features.hasOwnProperty(feature))
         code += features[feature] + '; ';
+
+      return false;
     }
 
     code += '})()';
