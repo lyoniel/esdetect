@@ -1,3 +1,7 @@
+/**
+ * Provides detection for ECMAScript features and version.
+ * @module esverd
+ */
 /*! https://github.com/hydroper/esverd */
 ;(function(root, factory) {
   'use strict';
@@ -48,6 +52,7 @@
 
   /**
    * Feature support checker.
+   * @return { Boolean } true if all argumented features are support. Or false, otherwise.
    */
   function supports() {
     var code = '(function(){';
@@ -113,7 +118,8 @@
   }
 
   /**
-   * Check for ECMAScript version.
+   * Checks for ECMAScript version.
+   * @return {Number | undefined} The possible ES version.
    */
   function detectVersion() {
     return checkES7() ? 7 :
