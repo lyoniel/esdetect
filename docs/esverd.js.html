@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>esverd Source: esverd.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top navbar-inverse">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">esverd</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-esverd.html">esverd</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-12">
+	
+		<div id="main">
+			
+
+		<h1 class="page-title">Source: esverd.js</h1>
+    
+<section>
+    <article>
+        <pre
+            class="sunlight-highlight-javascript linenums">/**
+ * Provides detection for ECMAScript features and version.
+ * @module esverd
+ */
+/*! https://github.com/hydroper/esverd */
+;(function(root, factory) {
+  'use strict';
+
+  /* Require.JS export */
+  if (('function' === typeof define) &amp;&amp; define.amd)
+    define([exports], factory);
+  /* Node.JS export */
+  else if ('object' === typeof exports)
+    factory(exports);
+  /* Browser export */
+  else
+    factory(root.esverd = {});
+
+})(this, function(exports) {
+  'use strict';
+
+  var features = {
+      'ArrayComprehensions': '[ for(a of []) a ]'
+    , 'ArrowFunction': '(_ => _)'
+    , 'Class': '(class Name {})'
+    , 'Const': 'const constant = true'
+    , 'DefaultParameter': '(function (A = true) {})'
+    , 'Destructuring': 'let {dest} = { dest: true }'
+    , 'ForOf': 'for (var b of [])'
+    , 'Generator': '(function*() {})'
+    , 'PropertyGetter': '({ get a() {} })'
+    , 'PropertySetter': '({ set a(v) {} })'
+    , 'IdentifierUnicodeEscapeSequence': '\\u0041'
+    , 'IdentifierUnicodeEscapeSequence2': '\\u{41}'
+    , 'Label': 'labelName: ;'
+    , 'Let': 'let stuck'
+    , 'LineBreakString': '\'\\\n\''
+    , 'ReservedWordIdentifier': '({ catch: true })'
+    , 'SpreadOperation': '[...[]]'
+    , 'TemplateLiteral': '`template`'
+    , 'SuperExpression': '({ method() { super.prop }} )'
+  };
+
+  function evaluate(code) {
+    try {
+      eval(code);
+      return true;
+    } catch(e) {
+      return false;
+    }
+  }
+
+  /**
+   * Feature support checker.
+   * @method supports
+   * @return {Boolean} true if all argumented features are support.
+   * Or false, otherwise.
+   */
+  function supports() {
+    var code = '(function(){';
+
+    var i = 0;
+    var len = arguments.length;
+
+    while (i &lt;= len) {
+      var feature = arguments[i].toString();
+
+      if (features.hasOwnProperty(feature))
+        code += features[feature] + ';';
+    }
+
+    code += '})()';
+    return evaluate(code);
+  }
+
+  exports.supports = supports;
+
+  function checkES7() {
+    return supports('ArrayComprehensions');
+  }
+
+  function checkES6() {
+    var methodSupport = ( 'function' === typeof Object.assign ) &amp;&amp;
+      ( 'function' === typeof Object.freeze );
+
+    var syntaxSupport = supports(
+        'ArrowFunction'
+      , 'Class'
+      , 'Const'
+      , 'ForOf'
+      , 'DefaultParameter'
+      , 'Destructuring'
+      , 'Generator'
+      , 'SuperExpression'
+    );
+    return methodSupport &amp;&amp; syntaxSupport;
+  }
+
+  function checkES5() {
+    var methodSupport =
+      /* Array #filter */
+      ( 'function' == typeof [].filter ) &amp;&amp;
+      /* Function #bind */
+      ( Function.prototype.bind instanceof Function ) &amp;&amp;
+      /* static Object.defineProperty */
+      ( Object.defineProperty instanceof Function ) &amp;&amp;
+      /* String #trim */
+      ( 'function' == typeof ''.trim ) &amp;&amp;
+      /* JSON library */
+      ( JSON instanceof Object );
+
+    var syntaxSupport = supports('ReservedWordIdentifier') &amp;&amp;
+      supports('LineBreakString');
+
+    return methodSupport &amp;&amp; syntaxSupport;
+  }
+
+  function checkES3() {
+    return [].hasOwnProperty instanceof Function;
+  }
+
+  /**
+   * Checks for ECMAScript version.
+   * @method version
+   * @return {Number | undefined} The possible ES version.
+   * If it's neither third, undefined is returned.
+   */
+  function version() {
+    return checkES7() ? 7 :
+      checkES6() ? 6 :
+      checkES5() ? 5 :
+      checkES3() ? 3 :
+      undefined;
+  };
+
+  exports.version = version;
+});</pre>
+    </article>
+</section>
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+	<span class="copyright">
+	esverd Copyright © 2016-2017.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on Fri Jan 13th 2017
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<html>
+<head>
+</head>
+<body style="background: transparent;">
+    <script src="scripts/docstrap.lib.js"></script>
+    <script src="scripts/lunr.min.js"></script>
+    <script src="scripts/fulltext-search.js"></script>
+
+    <script type="text/x-docstrap-searchdb">
+    {"esverd.js.html":{"id":"esverd.js.html","title":"Source: esverd.js","body":" esverd Modules esverd Source: esverd.js /** * Provides detection for ECMAScript features and version. * @module esverd */ /*! https://github.com/hydroper/esverd */ ;(function(root, factory) { 'use strict'; /* Require.JS export */ if (('function' === typeof define) &amp;&amp; define.amd) define([exports], factory); /* Node.JS export */ else if ('object' === typeof exports) factory(exports); /* Browser export */ else factory(root.esverd = {}); })(this, function(exports) { 'use strict'; var features = { 'ArrayComprehensions': '[ for(a of []) a ]' , 'ArrowFunction': '(_ =&gt; _)' , 'Class': '(class Name {})' , 'Const': 'const constant = true' , 'DefaultParameter': '(function (A = true) {})' , 'Destructuring': 'let {dest} = { dest: true }' , 'ForOf': 'for (var b of [])' , 'Generator': '(function*() {})' , 'PropertyGetter': '({ get a() {} })' , 'PropertySetter': '({ set a(v) {} })' , 'IdentifierUnicodeEscapeSequence': '\\\\u0041' , 'IdentifierUnicodeEscapeSequence2': '\\\\u{41}' , 'Label': 'labelName: ;' , 'Let': 'let stuck' , 'LineBreakString': '\\'\\\\\\n\\'' , 'ReservedWordIdentifier': '({ catch: true })' , 'SpreadOperation': '[...[]]' , 'TemplateLiteral': '`template`' , 'SuperExpression': '({ method() { super.prop }} )' }; function evaluate(code) { try { eval(code); return true; } catch(e) { return false; } } /** * Feature support checker. * @method supports * @return {Boolean} true if all argumented features are support. * Or false, otherwise. */ function supports() { var code = '(function(){'; var i = 0; var len = arguments.length; while (i &lt;= len) { var feature = arguments[i].toString(); if (features.hasOwnProperty(feature)) code += features[feature] + ';'; } code += '})()'; return evaluate(code); } exports.supports = supports; function checkES7() { return supports('ArrayComprehensions'); } function checkES6() { var methodSupport = ( 'function' === typeof Object.assign ) &amp;&amp; ( 'function' === typeof Object.freeze ); var syntaxSupport = supports( 'ArrowFunction' , 'Class' , 'Const' , 'ForOf' , 'DefaultParameter' , 'Destructuring' , 'Generator' , 'SuperExpression' ); return methodSupport &amp;&amp; syntaxSupport; } function checkES5() { var methodSupport = /* Array #filter */ ( 'function' == typeof [].filter ) &amp;&amp; /* Function #bind */ ( Function.prototype.bind instanceof Function ) &amp;&amp; /* static Object.defineProperty */ ( Object.defineProperty instanceof Function ) &amp;&amp; /* String #trim */ ( 'function' == typeof ''.trim ) &amp;&amp; /* JSON library */ ( JSON instanceof Object ); var syntaxSupport = supports('ReservedWordIdentifier') &amp;&amp; supports('LineBreakString'); return methodSupport &amp;&amp; syntaxSupport; } function checkES3() { return [].hasOwnProperty instanceof Function; } /** * Checks for ECMAScript version. * @method version * @return {Number | undefined} The possible ES version. * If it's neither third, undefined is returned. */ function version() { return checkES7() ? 7 : checkES6() ? 6 : checkES5() ? 5 : checkES3() ? 3 : undefined; }; exports.version = version; }); × Search results Close "},"modules.list.html":{"id":"modules.list.html","title":"Modules","body":" esverd Modules esverd Modules × Search results Close "},"index.html":{"id":"index.html","title":"Index","body":" esverd Modules esverd ECMAScript Version Detectoresverd can detect support for ECMAScript features. And can also detect the ECMAScript version. DocumentationThe documentation can be found exactly here. Compile it using: jsdoc -c jsdoc/conf.json -t ./node_modules/ink-do cstrap/template -d docs -R README.md -r esverd.jsThe esverd module is documented here. × Search results Close "},"module-esverd.html":{"id":"module-esverd.html","title":"Module: esverd","body":" esverd Modules esverd Module: esverd Provides detection for ECMAScript features and version. Source: esverd.js, line 1 Methods &lt;inner&gt; supports() Feature support checker. Source: esverd.js, line 53 Returns: true if all argumented features are support.Or false, otherwise. Type Boolean &lt;inner&gt; version() Checks for ECMAScript version. Source: esverd.js, line 122 Returns: The possible ES version.If it's neither third, undefined is returned. Type Number | undefined × Search results Close "}}
+    </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            Searcher.init();
+        });
+
+        $(window).on("message", function(msg) {
+            var msgData = msg.originalEvent.data;
+
+            if (msgData.msgid != "docstrap.quicksearch.start") {
+                return;
+            }
+
+            var results = Searcher.search(msgData.searchTerms);
+
+            window.parent.postMessage({"results": results, "msgid": "docstrap.quicksearch.done"}, "*");
+        });
+    </script>
+</body>
+</html>

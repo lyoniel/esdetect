@@ -52,7 +52,8 @@
 
   /**
    * Feature support checker.
-   * @return { Boolean } true if all argumented features are support.
+   * @method supports
+   * @return {Boolean} true if all argumented features are support.
    * Or false, otherwise.
    */
   function supports() {
@@ -120,8 +121,9 @@
 
   /**
    * Checks for ECMAScript version.
+   * @method version
    * @return {Number | undefined} The possible ES version.
-   * If it's neither ECMAScript 3, undefined is returned.
+   * If it's neither third, undefined is returned.
    */
   function version() {
     return checkES7() ? 7 :
