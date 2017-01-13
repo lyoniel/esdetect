@@ -36,7 +36,7 @@
     , 'Let': 'let stuck'
     , 'LineBreakString': '\'\\\n\''
     , 'ReservedWordIdentifier': '({ catch: true })'
-    , 'SpreadOperation': '[...[]]'
+    , 'Spread': '[...[]]'
     , 'TemplateLiteral': '`template`'
     , 'SuperExpression': '({ method() { super.prop }} )'
   };
