@@ -1,6 +1,6 @@
 /**
- * Provides detection for ECMAScript features and version.
- * @module esverd
+ * Detects supported ECMAScript features and version.
+ * @module esdetect
  */
 /*! https://github.com/hydroper/esverd */
 ;(function(root, factory) {
@@ -14,7 +14,7 @@
     factory(exports);
   /* Browser export */
   else
-    factory(root.esverd = {});
+    factory(root.detect = {});
 
 })(this, function(exports) {
   'use strict';
